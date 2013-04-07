@@ -13,11 +13,10 @@ Sample usage of using ANT
       debug="true"
       failonerror="true"
       compiler="javac1.6"
-      srcdir="StrutsTags/com/bi/struts/tag/components" includeantruntime="false" encoding="utf-8" verbose="true">
+      srcdir="StrutsTags/com/my/struts/tag/components" includeantruntime="false" encoding="utf-8" verbose="true">
         <classpath refid="tags.classpath"/>
         <compilerarg line="-proc:only"/>
         <compilerarg line="-processor com.lunary.struts.annotations.taglib.processor.Struts2AnnotationProcessor" />
-        <compilerarg line="-s dist/apt" />
         <compilerarg line="-source 6"/>
         <compilerarg value="-AtlibVersion=1.0" />
         <compilerarg value="-AjspVersion=2.0" />
