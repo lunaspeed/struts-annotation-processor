@@ -35,14 +35,11 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 
-@SupportedAnnotationTypes({Struts2AnnotationProcessor.TAG, Struts2AnnotationProcessor.TAG_ATTRIBUTE, Struts2AnnotationProcessor.TAG_SKIP_HIERARCHY})
+@SupportedAnnotationTypes({"org.apache.struts2.views.annotations.StrutsTag", "org.apache.struts2.views.annotations.StrutsTagAttribute", "org.apache.struts2.views.annotations.StrutsTagSkipInheritance"})
 @SupportedOptions({"outFile", "tlibVersion", "jspVersion", "shortName", "uri", "description", "displayName", "outTemplatesDir"})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class Struts2AnnotationProcessor extends AbstractProcessor {
 
-    public static final String TAG = "org.apache.struts2.views.annotations.StrutsTag";
-    public static final String TAG_ATTRIBUTE = "org.apache.struts2.views.annotations.StrutsTagAttribute";
-    public static final String TAG_SKIP_HIERARCHY = "org.apache.struts2.views.annotations.StrutsTagSkipInheritance";
     private Map<String, String> options;
     private final Map<String, Tag> tags = new TreeMap<String, Tag>();
 
@@ -128,6 +125,7 @@ public class Struts2AnnotationProcessor extends AbstractProcessor {
             Configuration config = new Configuration();
             config.setClassForTemplateLoading(getClass(), "");
             config.setObjectWrapper(new DefaultObjectWrapper());
+            config.setAutoFlush(true);
             saveAsXml(config);
             saveTemplates(config);
         }
@@ -242,8 +240,8 @@ public class Struts2AnnotationProcessor extends AbstractProcessor {
 
         try {
             // load template
-            Template template = config.getTemplate("tag.ftl");
-            String rootDir = (new File(getOption("outTemplatesDir"))).getAbsolutePath();
+            final Template template = config.getTemplate("tag.ftl");
+            final String rootDir = (new File(getOption("outTemplatesDir"))).getAbsolutePath();
             for (Tag tag : tags.values()) {
                 if (tag.isInclude()) {
                     // model
@@ -269,10 +267,10 @@ public class Struts2AnnotationProcessor extends AbstractProcessor {
 
     private void saveAsXml(final Configuration config) {
         try {
-            Template template = config.getTemplate("tld.ftl");
+            final Template template = config.getTemplate("tld.ftl");
             // create output directory if it does not exists
-            File outputFile = new File(getOption("outFile"));
-            File parentDir = outputFile.getParentFile();
+            final File outputFile = new File(getOption("outFile"));
+            final File parentDir = outputFile.getParentFile();
             if (!parentDir.exists()) {
                 if (!parentDir.mkdirs()) {
                     processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, "could not create parent folder for file " + outputFile.getCanonicalPath());
@@ -288,7 +286,7 @@ public class Struts2AnnotationProcessor extends AbstractProcessor {
             data.put("tags", tags.values());
 
             // save file
-            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+            final BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
             try {
                 template.process(data, writer);
             }

@@ -8,7 +8,7 @@
   <#list tags as t>
   <#if t.include>
   <tag>
-    <description><#if t.description??><![CDATA[${t.description}]]></#if></descript>
+    <description><#if t.description??><![CDATA[${t.description}]]></#if></description>
     <name>${t.name}</name>
     <tag-class>${t.tldTagClass}</tag-class>
     <body-content>${t.tldBodyContent}</body-content>
